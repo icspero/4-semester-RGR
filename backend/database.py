@@ -2,7 +2,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-# Настройки подключения
 POSTGRES_USER = "postgres"
 POSTGRES_PASSWORD = "root"
 POSTGRES_DB = "lab4"
@@ -20,6 +19,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 # Базовый класс для моделей
 Base = declarative_base()
 
+# Функция для получения сессия БД
 def get_db():
     db = SessionLocal()
     try:

@@ -3,7 +3,7 @@ import models, schemas
 from datetime import datetime
 from passlib.context import CryptContext
 
-# ===== Настройка хэширования паролей =====
+# Настройка хэширования паролей
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def get_password_hash(password: str):
@@ -13,7 +13,7 @@ def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
 
 
-# ===== Role =====
+# Role
 def get_roles(db: Session):
     return db.query(models.Role).all()
 
@@ -45,7 +45,7 @@ def delete_role(db: Session, role_id: int):
     return False
 
 
-# ===== Staff =====
+# Staff
 def get_staff(db: Session):
     return db.query(models.Staff).all()
 
@@ -68,7 +68,7 @@ def update_staff(db: Session, staff_id: int, staff_data: schemas.StaffCreate):
     if staff:
         for key, value in staff_data.dict(exclude={"password"}).items():
             setattr(staff, key, value)
-        # Если передан новый пароль, обновляем хэш
+        # если передан новый пароль, обновляем хэш
         if staff_data.password:
             staff.password = get_password_hash(staff_data.password)
         db.commit()
@@ -84,7 +84,7 @@ def delete_staff(db: Session, staff_id: int):
     return False
 
 
-# ===== Patient =====
+# Patient
 def create_patient(db: Session, patient: schemas.PatientCreate):
     db_patient = models.Patient(**patient.dict())
     db.add(db_patient)
@@ -117,7 +117,7 @@ def delete_patient(db: Session, patient_id: int):
     return True
 
 
-# ===== MedicalCard =====
+# MedicalCard
 def get_medical_cards(db: Session):
     return db.query(models.MedicalCard).all()
 
@@ -150,7 +150,7 @@ def delete_medical_card(db: Session, card_id: int):
     return False
 
 
-# ===== DoctorPatient =====
+# DoctorPatient
 def get_doctor_patients(db: Session):
     return db.query(models.DoctorPatient).all()
 
@@ -188,8 +188,7 @@ def update_doctor_patient(db: Session, doctor_id: int, patient_id: int, dp_data:
     return dp
 
 
-
-# ===== AccessLog =====
+# AccessLog
 def get_access_logs(db: Session):
     return db.query(models.AccessLog).all()
 

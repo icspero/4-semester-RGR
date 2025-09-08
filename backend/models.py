@@ -3,7 +3,6 @@ from sqlalchemy.orm import relationship
 from database import Base
 from datetime import datetime
 
-# ===== Role =====
 class Role(Base):
     __tablename__ = "role"
     role_id = Column(Integer, primary_key=True, index=True)
@@ -12,7 +11,6 @@ class Role(Base):
     staff_members = relationship("Staff", back_populates="role")
 
 
-# ===== Staff =====
 class Staff(Base):
     __tablename__ = "staff"
     staff_id = Column(Integer, primary_key=True, index=True)
@@ -29,7 +27,6 @@ class Staff(Base):
     access_logs = relationship("AccessLog", back_populates="doctor")
 
 
-# ===== Patient =====
 class Patient(Base):
     __tablename__ = "patient"
     visitor_id = Column(Integer, primary_key=True, index=True)
@@ -42,7 +39,6 @@ class Patient(Base):
     doctor_patients = relationship("DoctorPatient", back_populates="patient")
 
 
-# ===== MedicalCard =====
 class MedicalCard(Base):
     __tablename__ = "medicalcard"
     card_id = Column(Integer, primary_key=True, index=True)
@@ -56,7 +52,6 @@ class MedicalCard(Base):
     access_logs = relationship("AccessLog", back_populates="medical_card")
 
 
-# ===== DoctorPatient (многие-ко-многим) =====
 class DoctorPatient(Base):
     __tablename__ = "doctorpatient"
     doctor_id = Column(Integer, ForeignKey("staff.staff_id"), primary_key=True)
@@ -66,14 +61,13 @@ class DoctorPatient(Base):
     patient = relationship("Patient", back_populates="doctor_patients")
 
 
-# ===== AccessLog =====
 class AccessLog(Base):
     __tablename__ = "accesslog"
     log_id = Column(Integer, primary_key=True, index=True)
     doctor_id = Column(Integer, ForeignKey("staff.staff_id"), nullable=False)
     card_id = Column(Integer, ForeignKey("medicalcard.card_id"), nullable=False)
     access_time = Column(DateTime, default=datetime.utcnow, nullable=False)
-    access_type = Column(CHAR(20), nullable=False)  # Просмотр / Редактирование
+    access_type = Column(CHAR(20), nullable=False)
 
     doctor = relationship("Staff", back_populates="access_logs")
     medical_card = relationship("MedicalCard", back_populates="access_logs")

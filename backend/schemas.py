@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional, List
 
-# ===== Role =====
+# Role
 class RoleBase(BaseModel):
     name: str
 
@@ -16,7 +16,7 @@ class RoleResponse(RoleBase):
         orm_mode = True
 
 
-# ===== Staff =====
+# Staff
 class StaffBase(BaseModel):
     last_name: str
     first_name: str
@@ -35,7 +35,7 @@ class StaffResponse(StaffBase):
         orm_mode = True
 
 
-# ===== Patient =====
+# Patient
 class PatientBase(BaseModel):
     full_name: str
     phone_number: str
@@ -52,7 +52,7 @@ class PatientResponse(PatientBase):
         orm_mode = True
 
 
-# ===== MedicalCard =====
+# MedicalCard
 class MedicalCardBase(BaseModel):
     patient_id: int
     diagnosis: str
@@ -69,8 +69,6 @@ class MedicalCardResponse(MedicalCardBase):
     class Config:
         orm_mode = True
 
-
-# ===== DoctorPatient =====
 class DoctorPatientBase(BaseModel):
     doctor_id: int
     patient_id: int
@@ -83,11 +81,11 @@ class DoctorPatientResponse(DoctorPatientBase):
         orm_mode = True
 
 
-# ===== AccessLog =====
+# AccessLog
 class AccessLogBase(BaseModel):
     doctor_id: int
     card_id: int
-    access_type: str  # Просмотр / Редактирование
+    access_type: str
 
 class AccessLogCreate(AccessLogBase):
     pass

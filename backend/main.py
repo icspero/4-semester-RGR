@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException, status, Body, Request
+from fastapi import FastAPI, Depends, HTTPException, status, Body, Request, APIRouter
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from database import SessionLocal, engine, get_db
@@ -8,18 +8,30 @@ from datetime import timedelta
 from jose import jwt, JWTError
 from fastapi.responses import JSONResponse
 import logging
+from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI()
+app = FastAPI() # объект приложения
 
-# ====== Настройка логирования ======
+origins = ["http://localhost:3000"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # или ["*"] для теста
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# ЛОГИРОВАНИЕ
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
     handlers=[
-        logging.FileHandler("app.log"),  # сохраняем в файл
-        logging.StreamHandler()          # дублируем в консоль
+        logging.FileHandler("app.log"), # сохраняем в файл
+        logging.StreamHandler() # дублируем в консоль
     ]
 )
+
 logger = logging.getLogger(__name__)
 
 @app.exception_handler(Exception)
@@ -27,7 +39,7 @@ async def global_exception_handler(request: Request, exc: Exception):
     # логируем подробности ошибки на сервере
     logger.error(f"Ошибка: {repr(exc)} | Путь: {request.url.path}")
 
-    # возвращаем пользователю понятный ответ
+    # возвращаем понятный ответ
     return JSONResponse(
         status_code=500,
         content={"detail": "Внутренняя ошибка сервера. Мы уже работаем над этим!"}
@@ -35,10 +47,8 @@ async def global_exception_handler(request: Request, exc: Exception):
 
 
 
-# ========== АУТЕНТИФИКАЦИЯ ==========
-# --------------------
+# АУТЕНТИФИКАЦИЯ
 # Регистрация нового пользователя
-# --------------------
 @app.post("/register/", response_model=schemas.StaffResponse, status_code=201)
 def register_user(user: schemas.StaffCreate, db: Session = Depends(get_db)):
     existing_user = crud.get_staff_by_login(db, login=user.login)
@@ -47,10 +57,7 @@ def register_user(user: schemas.StaffCreate, db: Session = Depends(get_db)):
     new_user = crud.create_staff(db, user)
     return new_user
 
-
-# --------------------
 # Вход пользователя и получение JWT
-# --------------------
 @app.post("/login/")
 def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user = crud.get_staff_by_login(db, login=form_data.username)
@@ -97,13 +104,34 @@ def refresh_token(refresh_token: str = Body(...), db: Session = Depends(get_db))
 
     return {"access_token": new_access_token, "token_type": "bearer"}
 
-# ========== ПРИМЕР ЗАЩИЩЁННЫХ ЭНДПОИНТОВ ==========
 
 
-# --------------------
-# CRUD для Patient
-# --------------------
+#################################
+router = APIRouter()
+@router.get("/me/")
+def get_current_user_info(
+    db: Session = Depends(get_db),
+    current_user: models.Staff = Depends(get_current_user)
+):
+    user = db.query(models.Staff).filter(models.Staff.staff_id == current_user.staff_id).first()
+    return {
+        "staff_id": user.staff_id,
+        "login": user.login,
+        "first_name": user.first_name,
+        "middle_name": user.middle_name,
+        "last_name": user.last_name,
+        "role": {
+            "role_id": user.role.role_id,
+            "name": user.role.name
+        }
+    }
+app.include_router(router)
+##################################
 
+
+
+# ЭНДПОИНТЫ
+# Patient
 @app.post("/patients/", response_model=schemas.PatientResponse, status_code=201)
 def create_patient(
     patient: schemas.PatientCreate,
@@ -156,9 +184,7 @@ def delete_patient(
     return {"ok": True}
 
 
-# --------------------
-# CRUD для Role
-# --------------------
+# Role
 @app.post("/roles/", response_model=schemas.RoleResponse, status_code=201)
 def create_role(role: schemas.RoleCreate, db: Session = Depends(get_db)):
     return crud.create_role(db, role)
@@ -189,9 +215,7 @@ def delete_role(role_id: int, db: Session = Depends(get_db)):
     return {"ok": True}
 
 
-# --------------------
-# CRUD для Staff
-# --------------------
+# Staff
 @app.post("/staff/", response_model=schemas.StaffResponse, status_code=201)
 def create_staff(staff: schemas.StaffCreate, db: Session = Depends(get_db)):
     return crud.create_staff(db, staff)
@@ -221,9 +245,8 @@ def delete_staff(staff_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Staff not found")
     return {"ok": True}
 
-# --------------------
-# CRUD для MedicalCard
-# --------------------
+
+# MedicalCard
 @app.post("/cards/", response_model=schemas.MedicalCardResponse, status_code=201)
 def create_card(card: schemas.MedicalCardCreate, db: Session = Depends(get_db)):
     return crud.create_medical_card(db, card)
@@ -254,9 +277,7 @@ def delete_card(card_id: int, db: Session = Depends(get_db)):
     return {"ok": True}
 
 
-# --------------------
-# CRUD для DoctorPatient
-# --------------------
+# DoctorPatient
 @app.post("/doctorpatient/", response_model=schemas.DoctorPatientResponse, status_code=201)
 def create_doctor_patient(dp: schemas.DoctorPatientCreate, db: Session = Depends(get_db)):
     return crud.create_doctor_patient(db, dp)
@@ -287,9 +308,7 @@ def delete_doctor_patient(doctor_id: int, patient_id: int, db: Session = Depends
     return {"ok": True}
 
 
-# --------------------
-# CRUD для AccessLog
-# --------------------
+# AccessLog
 @app.post("/accesslog/", response_model=schemas.AccessLogResponse, status_code=201)
 def create_access_log(log: schemas.AccessLogCreate, db: Session = Depends(get_db)):
     return crud.create_access_log(db, log)
