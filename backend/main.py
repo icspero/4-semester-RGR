@@ -9,6 +9,8 @@ from jose import jwt, JWTError
 from fastapi.responses import JSONResponse
 import logging
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.orm import joinedload
+from typing import List
 
 app = FastAPI() # объект приложения
 
@@ -16,7 +18,7 @@ origins = ["http://localhost:3000"]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  # или ["*"] для теста
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -278,6 +280,43 @@ def delete_card(card_id: int, db: Session = Depends(get_db)):
 
 
 # DoctorPatient
+@app.get(
+    "/doctorpatient/by-doctor/{doctor_id}",
+    response_model=List[schemas.DoctorPatientWithLatestCardResponse]
+)
+def get_patients_by_doctor(
+    doctor_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.Staff = Depends(get_current_user)  # проверка авторизации
+):
+    doctor_patients = db.query(models.DoctorPatient)\
+        .options(
+            joinedload(models.DoctorPatient.patient)
+            .joinedload(models.Patient.medical_cards)
+        )\
+        .filter(models.DoctorPatient.doctor_id == doctor_id)\
+        .all()
+
+    result = []
+    for dp in doctor_patients:
+        patient = dp.patient
+        latest_card = max(patient.medical_cards, key=lambda c: c.created_at, default=None)
+        patient_data = schemas.PatientWithLatestCard(
+            visitor_id=patient.visitor_id,
+            full_name=patient.full_name,
+            phone_number=patient.phone_number,
+            latest_card=schemas.LatestCard(
+                diagnosis=latest_card.diagnosis,
+                treatment_plan=latest_card.treatment_plan
+            ) if latest_card else None
+        )
+        result.append(schemas.DoctorPatientWithLatestCardResponse(
+            doctor_id=dp.doctor_id,
+            patient=patient_data
+        ))
+
+    return result
+
 @app.post("/doctorpatient/", response_model=schemas.DoctorPatientResponse, status_code=201)
 def create_doctor_patient(dp: schemas.DoctorPatientCreate, db: Session = Depends(get_db)):
     return crud.create_doctor_patient(db, dp)

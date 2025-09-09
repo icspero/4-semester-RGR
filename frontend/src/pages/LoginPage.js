@@ -40,7 +40,7 @@ const LoginPage = () => {
   };
 
   const goToRegister = () => {
-    navigate("/register"); // редирект на страницу регистрации
+    navigate("/register");
   };
 
   return (

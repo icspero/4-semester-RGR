@@ -2,6 +2,20 @@ from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional, List
 
+class LatestCard(BaseModel):
+    diagnosis: Optional[str]
+    treatment_plan: Optional[str]
+
+class PatientWithLatestCard(BaseModel):
+    visitor_id: int
+    full_name: str
+    phone_number: Optional[str]
+    latest_card: Optional[LatestCard]
+
+class DoctorPatientWithLatestCardResponse(BaseModel):
+    doctor_id: int
+    patient: PatientWithLatestCard
+
 # Role
 class RoleBase(BaseModel):
     name: str

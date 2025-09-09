@@ -151,6 +151,9 @@ def delete_medical_card(db: Session, card_id: int):
 
 
 # DoctorPatient
+def get_doctor_patients_by_doctor(db: Session, doctor_id: int):
+    return db.query(models.DoctorPatient).filter(models.DoctorPatient.doctor_id == doctor_id).all()
+
 def get_doctor_patients(db: Session):
     return db.query(models.DoctorPatient).all()
 
