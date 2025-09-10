@@ -9,7 +9,6 @@ import AddCard from "./pages/AddCard";
 import Patient from "./pages/Patient";
 import AdminPage from "./pages/AdminPage";
 
-// Компонент для защиты приватных маршрутов
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem("access_token");
   return token ? children : <Navigate to="/login" />;
