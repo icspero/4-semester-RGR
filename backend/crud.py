@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 import models, schemas
 from datetime import datetime
 from passlib.context import CryptContext
+from sqlalchemy.orm import joinedload
 
 # Настройка хэширования паролей
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -192,8 +193,26 @@ def update_doctor_patient(db: Session, doctor_id: int, patient_id: int, dp_data:
 
 
 # AccessLog
-def get_access_logs(db: Session):
-    return db.query(models.AccessLog).all()
+def get_access_logs(db: Session, skip: int = 0, limit: int = 10):
+    logs = (
+        db.query(models.AccessLog)
+        .options(joinedload(models.AccessLog.doctor))
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
+
+    result = []
+    for log in logs:
+        result.append({
+            "log_id": log.log_id,
+            "doctor_id": log.doctor_id,
+            "doctor_name": f"{log.doctor.first_name} {log.doctor.last_name}",
+            "card_id": log.card_id,
+            "access_type": log.access_type,
+            "access_time": log.access_time
+        })
+    return result
 
 def create_access_log(db: Session, log: schemas.AccessLogCreate):
     db_log = models.AccessLog(**log.dict(), access_time=datetime.utcnow())

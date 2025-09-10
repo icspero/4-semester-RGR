@@ -1,3 +1,91 @@
 2025-09-10 01:14:40,097 - ERROR - Ошибка: IntegrityError('(psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "doctorpatient_pkey"\nDETAIL:  Key (doctor_id, patient_id)=(4, 7) already exists.\n') | Путь: /doctorpatient/
 2025-09-10 01:15:35,465 - ERROR - Ошибка: IntegrityError('(psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "doctorpatient_pkey"\nDETAIL:  Key (doctor_id, patient_id)=(4, 8) already exists.\n') | Путь: /doctorpatient/
 2025-09-10 01:16:23,716 - ERROR - Ошибка: IntegrityError('(psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "doctorpatient_pkey"\nDETAIL:  Key (doctor_id, patient_id)=(4, 8) already exists.\n') | Путь: /doctorpatient/
+2025-09-10 18:27:53,972 - ERROR - Ошибка: TypeError("get_medical_cards() got an unexpected keyword argument 'skip'") | Путь: /cards/
+2025-09-10 18:27:54,015 - ERROR - Ошибка: TypeError("get_medical_cards() got an unexpected keyword argument 'skip'") | Путь: /cards/
+2025-09-10 18:27:54,017 - ERROR - Ошибка: TypeError("get_medical_cards() got an unexpected keyword argument 'skip'") | Путь: /cards/
+2025-09-10 18:27:55,722 - ERROR - Ошибка: TypeError("get_medical_cards() got an unexpected keyword argument 'skip'") | Путь: /cards/
+2025-09-10 18:27:55,725 - ERROR - Ошибка: TypeError("get_medical_cards() got an unexpected keyword argument 'skip'") | Путь: /cards/
+2025-09-10 18:27:55,731 - ERROR - Ошибка: TypeError("get_medical_cards() got an unexpected keyword argument 'skip'") | Путь: /cards/
+2025-09-10 18:27:57,481 - ERROR - Ошибка: TypeError("get_medical_cards() got an unexpected keyword argument 'skip'") | Путь: /cards/
+2025-09-10 18:27:57,486 - ERROR - Ошибка: TypeError("get_medical_cards() got an unexpected keyword argument 'skip'") | Путь: /cards/
+2025-09-10 18:27:57,491 - ERROR - Ошибка: TypeError("get_medical_cards() got an unexpected keyword argument 'skip'") | Путь: /cards/
+2025-09-10 18:27:59,580 - ERROR - Ошибка: TypeError("get_medical_cards() got an unexpected keyword argument 'skip'") | Путь: /cards/
+2025-09-10 18:27:59,587 - ERROR - Ошибка: TypeError("get_medical_cards() got an unexpected keyword argument 'skip'") | Путь: /cards/
+2025-09-10 18:27:59,592 - ERROR - Ошибка: TypeError("get_medical_cards() got an unexpected keyword argument 'skip'") | Путь: /cards/
+2025-09-10 18:28:19,282 - ERROR - Ошибка: TypeError("get_medical_cards() got an unexpected keyword argument 'skip'") | Путь: /cards/
+2025-09-10 18:28:19,298 - ERROR - Ошибка: TypeError("get_medical_cards() got an unexpected keyword argument 'skip'") | Путь: /cards/
+2025-09-10 18:28:19,305 - ERROR - Ошибка: TypeError("get_medical_cards() got an unexpected keyword argument 'skip'") | Путь: /cards/
+2025-09-10 18:52:14,056 - ERROR - Ошибка: NameError("name 'datetime' is not defined") | Путь: /patients/1
+2025-09-10 18:52:14,085 - ERROR - Ошибка: NameError("name 'datetime' is not defined") | Путь: /patients/1
+2025-09-10 18:52:14,103 - ERROR - Ошибка: NameError("name 'datetime' is not defined") | Путь: /patients/1
+2025-09-10 18:52:15,783 - ERROR - Ошибка: NameError("name 'datetime' is not defined") | Путь: /patients/4
+2025-09-10 18:52:15,792 - ERROR - Ошибка: NameError("name 'datetime' is not defined") | Путь: /patients/4
+2025-09-10 18:52:15,804 - ERROR - Ошибка: NameError("name 'datetime' is not defined") | Путь: /patients/4
+2025-09-10 18:52:16,758 - ERROR - Ошибка: NameError("name 'datetime' is not defined") | Путь: /patients/7
+2025-09-10 18:52:16,767 - ERROR - Ошибка: NameError("name 'datetime' is not defined") | Путь: /patients/7
+2025-09-10 18:52:16,779 - ERROR - Ошибка: NameError("name 'datetime' is not defined") | Путь: /patients/7
+2025-09-10 19:02:06,718 - ERROR - Ошибка: TypeError("get_access_logs() got an unexpected keyword argument 'skip'") | Путь: /accesslog/
+2025-09-10 19:02:06,743 - ERROR - Ошибка: TypeError("get_access_logs() got an unexpected keyword argument 'skip'") | Путь: /accesslog/
+2025-09-10 19:02:06,748 - ERROR - Ошибка: TypeError("get_access_logs() got an unexpected keyword argument 'skip'") | Путь: /accesslog/
+2025-09-10 19:06:30,740 - ERROR - Ошибка: NameError("name 'joinedload' is not defined") | Путь: /accesslog/
+2025-09-10 19:55:44,783 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 19:55:44,800 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 19:55:44,807 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 19:55:47,453 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 19:55:48,373 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 19:55:49,101 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 19:55:49,812 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 19:55:50,581 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 19:55:50,862 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 19:55:55,417 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 19:55:58,293 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 19:55:59,074 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 19:56:21,039 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 19:56:21,542 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 19:56:22,037 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:00:56,065 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:00:58,852 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:00:59,196 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:00:59,674 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:05:44,663 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:05:44,676 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:05:48,355 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:05:48,480 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:05:48,571 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:05:49,860 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:05:50,461 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:05:50,747 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:08:08,444 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:08:10,401 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:08:10,839 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:08:11,226 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:08:11,370 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:08:11,958 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:08:12,165 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:08:12,324 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:08:12,743 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:08:12,904 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:08:13,085 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:08:13,900 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:08:14,057 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:08:14,207 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:08:14,543 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:08:14,709 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:08:14,851 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:10:25,225 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:10:25,257 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:10:25,268 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:10:26,676 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:10:27,390 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:11:26,238 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:11:29,054 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:11:29,678 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:11:30,134 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:11:31,038 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:11:31,638 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:11:31,997 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:11:49,989 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:11:50,353 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:11:51,340 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/
+2025-09-10 20:11:51,467 - ERROR - Ошибка: AttributeError("module 'crud' has no attribute 'get_staff_list'") | Путь: /staff/

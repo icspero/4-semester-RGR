@@ -10,14 +10,13 @@ const RegisterPage = () => {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [roleId, setRoleId] = useState(""); // выбранная роль
-  const [roles, setRoles] = useState([]);   // список ролей с сервера
+  const [roleId, setRoleId] = useState("");
+  const [roles, setRoles] = useState([]);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Загружаем роли с сервера при монтировании компонента
     axios.get("http://127.0.0.1:8000/roles/")
       .then(res => setRoles(res.data))
       .catch(err => console.error("Не удалось загрузить роли", err));

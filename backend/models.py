@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, CHAR
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, CHAR, UniqueConstraint
 from sqlalchemy.orm import relationship
 from database import Base
 from datetime import datetime
@@ -71,3 +71,7 @@ class AccessLog(Base):
 
     doctor = relationship("Staff", back_populates="access_logs")
     medical_card = relationship("MedicalCard", back_populates="access_logs")
+
+    __table_args__ = (
+        UniqueConstraint("doctor_id", "card_id", "access_type", name="unique_access_log"),
+    )

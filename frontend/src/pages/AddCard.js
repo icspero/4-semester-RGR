@@ -17,14 +17,12 @@ function AddCard() {
   useEffect(() => {
     if (!token) return;
 
-    // Получаем текущего пользователя
     axios.get("http://127.0.0.1:8000/me/", {
       headers: { Authorization: `Bearer ${token}` },
     })
     .then(res => setUser(res.data))
     .catch(err => console.error("Ошибка при получении пользователя", err));
 
-    // Получаем всех пациентов
     axios.get("http://127.0.0.1:8000/patients/", {
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -46,24 +44,22 @@ function AddCard() {
     }
 
     try {
-      // Создаём медкарту
       await axios.post("http://127.0.0.1:8000/cards", newCard, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      // Привязываем пациента к врачу
       await axios.post(
         "http://127.0.0.1:8000/doctorpatient/",
         {
-          doctor_id: parseInt(user.staff_id),          // приводим к числу
-          patient_id: parseInt(newCard.patient_id)    // приводим к числу
+          doctor_id: parseInt(user.staff_id),     
+          patient_id: parseInt(newCard.patient_id)   
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
       alert("Медкарта создана и пациент привязан к врачу!");
       setNewCard({ patient_id: "", diagnosis: "", treatment_plan: "" });
-      navigate("/home"); // редирект на главную
+      navigate("/home");
     } catch (err) {
       console.error("Ошибка создания медкарты:", err);
       alert("Ошибка при создании медкарты, у вас уже есть этот пациент!");

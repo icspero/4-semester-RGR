@@ -6,6 +6,8 @@ import RegisterPage from "./pages/RegisterPage";
 import AddPatient from "./pages/AddPatient";
 import MyPatients from "./pages/MyPatients";
 import AddCard from "./pages/AddCard";
+import Patient from "./pages/Patient";
+import AdminPage from "./pages/AdminPage";
 
 // Компонент для защиты приватных маршрутов
 const PrivateRoute = ({ children }) => {
@@ -22,6 +24,8 @@ function App() {
         <Route path="/add-patient" element={<AddPatient />} />
         <Route path="/my-patients" element={<MyPatients />} />
         <Route path="/add-card" element={<AddCard />} />
+        <Route path="/patients/:id" element={<Patient />} />
+        <Route path="/accesslog/" element={<AdminPage />} />
         <Route
           path="/home"
           element={

@@ -11,6 +11,8 @@ import logging
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import joinedload
 from typing import List
+from math import ceil
+from schemas import AccessLogResponse
 
 app = FastAPI() # объект приложения
 
@@ -23,6 +25,26 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+router = APIRouter()
+@router.get("/me/")
+def get_current_user_info(
+    db: Session = Depends(get_db),
+    current_user: models.Staff = Depends(get_current_user)
+):
+    user = db.query(models.Staff).filter(models.Staff.staff_id == current_user.staff_id).first()
+    return {
+        "staff_id": user.staff_id,
+        "login": user.login,
+        "first_name": user.first_name,
+        "middle_name": user.middle_name,
+        "last_name": user.last_name,
+        "role": {
+            "role_id": user.role.role_id,
+            "name": user.role.name
+        }
+    }
+app.include_router(router)
 
 # ЛОГИРОВАНИЕ
 logging.basicConfig(
@@ -72,7 +94,10 @@ def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = D
 
     access_token_expires = timedelta(minutes=auth.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = auth.create_access_token(
-        data={"sub": str(user.staff_id)},
+        data={
+            "sub": str(user.staff_id),
+            "role": user.role.name
+        },
         expires_delta=access_token_expires
     )
 
@@ -101,34 +126,14 @@ def refresh_token(refresh_token: str = Body(...), db: Session = Depends(get_db))
 
     access_token_expires = timedelta(minutes=auth.ACCESS_TOKEN_EXPIRE_MINUTES)
     new_access_token = auth.create_access_token(
-        data={"sub": str(user.staff_id)}, expires_delta=access_token_expires
+        data={
+            "sub": str(user.staff_id),
+            "role": user.role.name
+        },
+        expires_delta=access_token_expires
     )
 
     return {"access_token": new_access_token, "token_type": "bearer"}
-
-
-
-#################################
-router = APIRouter()
-@router.get("/me/")
-def get_current_user_info(
-    db: Session = Depends(get_db),
-    current_user: models.Staff = Depends(get_current_user)
-):
-    user = db.query(models.Staff).filter(models.Staff.staff_id == current_user.staff_id).first()
-    return {
-        "staff_id": user.staff_id,
-        "login": user.login,
-        "first_name": user.first_name,
-        "middle_name": user.middle_name,
-        "last_name": user.last_name,
-        "role": {
-            "role_id": user.role.role_id,
-            "name": user.role.name
-        }
-    }
-app.include_router(router)
-##################################
 
 
 
@@ -142,16 +147,49 @@ def create_patient(
 ):
     return crud.create_patient(db, patient)
 
-@app.get("/patients/{patient_id}", response_model=schemas.PatientResponse)
-def read_patient(
+from sqlalchemy.exc import IntegrityError
+
+from datetime import datetime, timedelta
+
+@app.get("/patients/{patient_id}", response_model=schemas.PatientWithLatestCard)
+def get_patient_with_latest_card(
     patient_id: int,
     db: Session = Depends(get_db),
-    current_user: schemas.StaffResponse = Depends(get_current_user)
+    current_user: models.Staff = Depends(get_current_user)
 ):
-    db_patient = crud.get_patient(db, patient_id)
-    if db_patient is None:
+    patient = db.query(models.Patient).filter(models.Patient.visitor_id == patient_id).first()
+    if not patient:
         raise HTTPException(status_code=404, detail="Patient not found")
-    return db_patient
+
+    latest_card = (
+        db.query(models.MedicalCard)
+        .filter(models.MedicalCard.patient_id == patient_id)
+        .order_by(models.MedicalCard.created_at.desc())
+        .first()
+    )
+
+    if latest_card:
+        existing_log = db.query(models.AccessLog).filter(
+            models.AccessLog.doctor_id == current_user.staff_id,
+            models.AccessLog.card_id == latest_card.card_id
+        ).order_by(models.AccessLog.access_time.desc()).first()
+
+        if not existing_log or (datetime.utcnow() - existing_log.access_time).total_seconds() > 1:
+            crud.create_access_log(db, schemas.AccessLogCreate(
+                doctor_id=current_user.staff_id,
+                card_id=latest_card.card_id,
+                access_type="view"
+            ))
+
+    return {
+        "visitor_id": patient.visitor_id,
+        "full_name": patient.full_name,
+        "phone_number": patient.phone_number,
+        "latest_card": {
+            "diagnosis": latest_card.diagnosis if latest_card else None,
+            "treatment_plan": latest_card.treatment_plan if latest_card else None,
+        },
+    }
 
 @app.get("/patients/", response_model=list[schemas.PatientResponse])
 def read_patients(
@@ -359,9 +397,42 @@ def read_access_log(log_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="AccessLog not found")
     return db_log
 
-@app.get("/accesslog/", response_model=list[schemas.AccessLogResponse])
-def read_access_logs(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-    return crud.get_access_logs(db, skip=skip, limit=limit)
+@app.get("/accesslog/")
+def get_access_logs(
+    page: int = 1,
+    size: int = 5,
+    db: Session = Depends(get_db)
+):
+    total_logs = db.query(models.AccessLog).count()
+    total_pages = ceil(total_logs / size)
+
+    logs = (
+        db.query(models.AccessLog)
+        .order_by(models.AccessLog.access_time.desc())
+        .offset((page - 1) * size)
+        .limit(size)
+        .all()
+    )
+
+    result = []
+    for log in logs:
+        doctor = db.query(models.Staff).filter(models.Staff.staff_id == log.doctor_id).first()
+        result.append(
+            AccessLogResponse(
+                log_id=log.log_id,
+                doctor_id=log.doctor_id,
+                doctor_name=f"{doctor.first_name} {doctor.last_name}" if doctor else "Неизвестно",
+                card_id=log.card_id,
+                access_type=log.access_type,
+                access_time=log.access_time
+            )
+        )
+
+    return {
+        "logs": result,
+        "total_pages": total_pages,
+        "current_page": page
+    }
 
 @app.put("/accesslog/{log_id}", response_model=schemas.AccessLogResponse)
 def update_access_log(log_id: int, log: schemas.AccessLogCreate, db: Session = Depends(get_db)):

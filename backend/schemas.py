@@ -104,8 +104,12 @@ class AccessLogBase(BaseModel):
 class AccessLogCreate(AccessLogBase):
     pass
 
-class AccessLogResponse(AccessLogBase):
+class AccessLogResponse(BaseModel):
     log_id: int
+    doctor_id: int
+    doctor_name: Optional[str]
+    card_id: int
+    access_type: str
     access_time: datetime
 
     class Config:

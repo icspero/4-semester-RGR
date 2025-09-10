@@ -32,20 +32,30 @@ function HomePage() {
         <>
           <h2>Добро пожаловать, {user.first_name} {user.last_name}!</h2>
           <p>Ваша роль: {user.role?.name}</p>
+
+          <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
+            {user.role?.name === "Doctor" && (
+              <>
+                <button onClick={() => navigate("/my-patients")}>
+                  Мои пациенты
+                </button>
+                <button onClick={() => navigate("/add-patient")}>
+                  Добавить пациента
+                </button>
+                <button onClick={() => navigate("/add-card")}>
+                  Создать медкарту
+                </button>
+              </>
+            )}
+
+            {user.role?.name === "Admin" && (
+              <button onClick={() => navigate("/accesslog")}>
+                Посмотреть сводку
+              </button>
+            )}
+          </div>
         </>
       )}
-
-      <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
-        <button onClick={() => navigate("/my-patients")}>
-          Мои пациенты
-        </button>
-        <button onClick={() => navigate("/add-patient")}>
-          Добавить пациента
-        </button>
-        <button onClick={() => navigate("/add-card")}>
-          Создать медкарту
-        </button>
-      </div>
 
       <div style={{ marginTop: "20px" }}>
         <button
